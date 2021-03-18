@@ -45,8 +45,6 @@ public class Main {
             }
 
         }
-        
-       
     }
 
     private static String[] checkForSameLinesInS() throws IOException {
@@ -63,6 +61,7 @@ public class Main {
         // This return will never execute, it is just for the compiler
         return wordsS;
     }
+
 
     private static String[] checkForSameLinesInR() throws IOException {
         while(fileReaderR.hasNextLine()){
