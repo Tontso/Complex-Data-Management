@@ -22,7 +22,7 @@ public class Main {
 
         fileReaderR = new Scanner(new File("R_sorted.tsv"));
         fileReaderS = new Scanner(new File("S_sorted.tsv"));
-        myWriter = new FileWriter("myFileExercise2.txt");
+        myWriter = new FileWriter("myFileExercise3.txt");
 
         wordsR = fileReaderR.nextLine().split("\\s+");
         wordsS = fileReaderS.nextLine().split("\\s+");

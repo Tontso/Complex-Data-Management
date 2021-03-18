@@ -72,7 +72,7 @@ public class Main {
                 return wordsR;
             }
         }
-        readOnlyFrom(fileReaderS, wordsS);
+        //readOnlyFrom(fileReaderS, wordsS);
         myWriter.close();
         System.exit(0);
         // This return will never execute, it is just for the compiler
@@ -106,7 +106,7 @@ public class Main {
                 myWriter.write(wordsR[0] +" : "+ wordsR[1]+"\n");
                 return "readFromR";
             }else{
-                myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
+                //myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
                 return "readFromS";
             }
         // aa --  ab    
@@ -115,7 +115,7 @@ public class Main {
             return "readFromR";
         // ab -- aa    
         }else{
-            myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
+            //myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
             return "readFromS";
         }
     }
