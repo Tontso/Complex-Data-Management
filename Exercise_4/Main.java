@@ -72,7 +72,6 @@ public class Main {
                 return wordsR;
             }
         }
-        //readOnlyFrom(fileReaderS, wordsS);
         myWriter.close();
         System.exit(0);
         // This return will never execute, it is just for the compiler
@@ -100,13 +99,11 @@ public class Main {
         // aa -- aa
         if(wordsR[0].equals(wordsS[0])) {
             if(wordsR[1].equals(wordsS[1])){      
-                //System.out.println(wordsR[0] +" : "+ wordsR[1]);
                 return "readFromBoth";
             }else if(Integer.parseInt(wordsR[1]) < Integer.parseInt(wordsS[1])){
                 myWriter.write(wordsR[0] +" : "+ wordsR[1]+"\n");
                 return "readFromR";
             }else{
-                //myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
                 return "readFromS";
             }
         // aa --  ab    
@@ -115,7 +112,6 @@ public class Main {
             return "readFromR";
         // ab -- aa    
         }else{
-            //myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
             return "readFromS";
         }
     }
