@@ -1,21 +1,42 @@
 package Exercise_5;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
-    //private static ArrayList<Integer> same = new ArrayList<>();
-    //private static int same = 0;
+    public static void main(String args[]) throws IOException{
 
-    public static void sort(List<Integer> list) {
+
+        List<String[]> arrayList = new ArrayList<String[]>();
+        Scanner fileReader = new Scanner(new File("R.tsv"));
+        FileWriter myWriter = new FileWriter("Ex5.txt");
+
+        while(fileReader.hasNext()){
+            arrayList.add(fileReader.nextLine().split("\\s+"));
+        }
+
+        //List<Integer> mySortedList = sorted(numbers);
+        sort(arrayList);
+        for (String[] line : arrayList){
+            myWriter.write(line[0]+" : "+line[1]+"\n");
+        }
+        myWriter.close();
+        
+    }
+
+
+    public static void sort(List<String[]> list) {
         if (list.size() < 2) {
           return;
         }
         int mid = list.size()/2;
-        List<Integer> left = new ArrayList<Integer>(list.subList(0, mid));
-        List<Integer> right = new ArrayList<Integer>(list.subList(mid, list.size()));
+        List<String[]> left = new ArrayList<String[]>(list.subList(0, mid));
+        List<String[]> right = new ArrayList<String[]>(list.subList(mid, list.size()));
     
         sort(left);
         sort(right);
@@ -23,23 +44,24 @@ public class Main {
     }
     
 
-    private static void merge(List<Integer> left, List<Integer> right, List<Integer> list, int mid) {
+    private static void merge(List<String[]> left, List<String[]> right, List<String[]> list, int mid) {
         int same = 0;
         int leftIndex = 0;
         int rightIndex = 0;
         int listIndex = 0;
         
-        while(list.size() > right.size() + left.size()){
+        while(list.size() > right.size() + left.size()) {
             list.remove(list.size()-1);
         }
         
         // have done delete
         while (leftIndex < left.size() && rightIndex < right.size()) {
-            if (left.get(leftIndex) == right.get(rightIndex)) { 
+            if (left.get(leftIndex)[0].equals(right.get(rightIndex)[0])){
+                left.get(leftIndex)[1] = (Integer.parseInt(left.get(leftIndex)[1]) + Integer.parseInt(right.get(rightIndex)[1]))+"";;
                 list.set(listIndex++, left.get(leftIndex++));
                 rightIndex++;
                 same++;
-            }else if (left.get(leftIndex) < right.get(rightIndex)) {
+            }else if (left.get(leftIndex)[0].compareTo(right.get(rightIndex)[0]) < 0) {
                 list.set(listIndex++, left.get(leftIndex++));
             }else {
                 list.set(listIndex++, right.get(rightIndex++));
@@ -57,53 +79,4 @@ public class Main {
         }
     }
 
-
-
-    /* 
-    public static List<Integer> sorted(List<Integer> list) {
-        if (list.size() < 2) {
-          return list;
-        }
-        int mid = list.size()/2;
-        return merged(
-        sorted(list.subList(0, mid)), 
-        sorted(list.subList(mid, list.size())));
-    }
-    
-    private static List<Integer> merged(List<Integer> left, List<Integer> right) {
-        int leftIndex = 0;
-        int rightIndex = 0;
-        List<Integer> merged = new ArrayList<Integer>();
-    
-        while (leftIndex < left.size() && rightIndex < right.size()) {
-            if (left.get(leftIndex) == right.get(rightIndex)) {
-                leftIndex++;
-                //merged.remove(left.get(leftIndex));
-                continue;
-            }  
-            if (left.get(leftIndex) < right.get(rightIndex)) {
-                merged.add(left.get(leftIndex++));
-            }else {
-                merged.add(right.get(rightIndex++));
-            } 
-        }
-        merged.addAll(left.subList(leftIndex, left.size()));
-        merged.addAll(right.subList(rightIndex, right.size()));
-        return merged;
-    } */
-  
-
-
-    public static void main(String args[])
-    {
-        //int arr[] = { 12, 5, 11, 13, 5, 6, 7, 5 };
-        List<Integer> numbers = new ArrayList<Integer>(Arrays.asList(2,1,1,4,11,10,3,1,2,3,4,12,12,14));
- 
-        //List<Integer> mySortedList = sorted(numbers);
-        sort(numbers);
-        for (Integer integer : numbers) {
-            System.out.println(integer);
-        }
-        
-    }
 }
