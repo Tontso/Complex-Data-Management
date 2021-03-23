@@ -17,7 +17,7 @@ public class Main{
     private static String[] wordsR = {"",""};
     private static String[] wordsS = {"",""};
     private static String[] prevR = {"null","null"};
-    private static int maxBufferSize = -1;
+    private static int maxBufferSize = 0;
     
     public static void main(String[] args) throws IOException{
         String readFrom= "";
@@ -26,7 +26,7 @@ public class Main{
         fileReaderS = new Scanner(new File("Exercise_1\\TestFile2.txt"));
         myWriter = new FileWriter("Ex1.txt");
 
-        if(!( fileReaderR.hasNextLine() || fileReaderS.hasNextLine())){
+        if(!( fileReaderR.hasNextLine() || fileReaderS.hasNext())){
             System.out.println("One of the files is empty.");
             myWriter.close();
             System.exit(0);
@@ -88,6 +88,7 @@ public class Main{
             }
             merge(wordsR);
         }
+        keepMaxBufferSize();
         System.out.println("Max Buffer: "+maxBufferSize);
         myWriter.close();
         System.exit(0);
@@ -98,7 +99,7 @@ public class Main{
 
 
     private static void keepMaxBufferSize() {
-        if(buffer.size() > maxBufferSize){
+        if(buffer.size() >= maxBufferSize){
             maxBufferSize = buffer.size();
         }
         buffer.clear();
@@ -117,6 +118,7 @@ public class Main{
                 break;
             }
         }
+        keepMaxBufferSize();
         System.out.println("Max Buffer: "+maxBufferSize);
         myWriter.close();
         System.exit(0);

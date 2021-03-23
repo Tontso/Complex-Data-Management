@@ -20,8 +20,8 @@ public class Main {
     public static void main(String[] args) throws IOException{
         String readFrom;
 
-        fileReaderR = new Scanner(new File("R_sorted.tsv"));
-        fileReaderS = new Scanner(new File("S_sorted.tsv"));
+        fileReaderR = new Scanner(new File("Exercise_2\\TestFileEx2.txt"));
+        fileReaderS = new Scanner(new File("Exercise_2\\TestFile2Ex2.txt"));
         myWriter = new FileWriter("myFileExercise2.txt");
         
         // Read first Line
@@ -86,6 +86,7 @@ public class Main {
         return wordsS;
     }
 
+
     private static String[] checkForSameLinesInR() throws IOException {
         while(fileReaderR.hasNextLine()){
             wordsR = fileReaderR.nextLine().split("\\s+");
@@ -102,17 +103,16 @@ public class Main {
     }
 
 
-
     private static void readOnlyFrom(Scanner fileReader, String[] words) throws IOException {
         String[] prev = words;
         if(!(prev[0].equals(wordsR[0]) && prev[0].equals(wordsS[0]) && prev[1].equals(wordsR[1]) && prev[1].equals(wordsS[1]) )){
-            myWriter.write(prev[0] +" : " + prev[1]+"\n");
+            myWriter.write(prev[0] +"\t" + prev[1]+"\n");
         }
         while(fileReader.hasNextLine()){
             words = fileReader.nextLine().split("\\s+");
             if(!(prev[0].equals(words[0]) && prev[1].equals(words[1]))){
                 prev = words;
-                myWriter.write(words[0] +" : " + words[1]+"\n");
+                myWriter.write(words[0] +"\t" + words[1]+"\n");
             }
         }
     }
@@ -123,22 +123,22 @@ public class Main {
         // aa -- aa
         if(wordsR[0].equals(wordsS[0])) {
             if(Integer.parseInt(wordsR[1]) < Integer.parseInt(wordsS[1])){
-                myWriter.write(wordsR[0] +" : "+ wordsR[1]+"\n");
+                myWriter.write(wordsR[0] +"\t"+ wordsR[1]+"\n");
                 return "readFromR";
             }else if(Integer.parseInt(wordsR[1]) > Integer.parseInt(wordsS[1])){
-                myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
+                myWriter.write(wordsS[0] +"\t"+ wordsS[1]+"\n");
                 return "readFromS";
             }else{
-                myWriter.write(wordsR[0] +" : "+ wordsR[1]+"\n");
+                myWriter.write(wordsR[0] +"\t"+ wordsR[1]+"\n");
                 return "readFromBoth";
             }
         // aa --  ab    
         }else if(wordsR[0].compareTo(wordsS[0]) < 0){
-            myWriter.write(wordsR[0] +" : "+ wordsR[1]+"\n");
+            myWriter.write(wordsR[0] +"\t"+ wordsR[1]+"\n");
             return "readFromR";
         // ab -- aa    
         }else{
-            myWriter.write(wordsS[0] +" : "+ wordsS[1]+"\n");
+            myWriter.write(wordsS[0] +"\t"+ wordsS[1]+"\n");
             return "readFromS";
         }
     }

@@ -1,4 +1,7 @@
-ab	33
-ab	33
-ab	33
-ab	33
+ab	45
+ab	48
+ac	23
+ae	30
+af	68
+ag	92
+ah	10
