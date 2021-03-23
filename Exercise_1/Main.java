@@ -1,11 +1,11 @@
 package Exercise_1;
-
+// Tontso Tontsev
+// AM 3168
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 
 
 public class Main{
@@ -22,9 +22,15 @@ public class Main{
     public static void main(String[] args) throws IOException{
         String readFrom= "";
 
-        fileReaderR = new Scanner(new File("R_sorted.tsv"));
-        fileReaderS = new Scanner(new File("S_sorted.tsv"));
+        fileReaderR = new Scanner(new File("Exercise_1\\TestFile1.txt"));
+        fileReaderS = new Scanner(new File("Exercise_1\\TestFile2.txt"));
         myWriter = new FileWriter("Ex1.txt");
+
+        if(!( fileReaderR.hasNextLine() || fileReaderS.hasNextLine())){
+            System.out.println("One of the files is empty.");
+            myWriter.close();
+            System.exit(0);
+        }
 
         wordsR = fileReaderR.nextLine().split("\\s+");
         wordsS = fileReaderS.nextLine().split("\\s+");
@@ -52,6 +58,7 @@ public class Main{
         }       
     }
 
+
     private static String compareTwoStrings(String[] wordsR, String[] wordsS) throws IOException {
 
         // aa -- aa
@@ -61,7 +68,6 @@ public class Main{
             
         // aa --  ab    
         }else if(wordsR[0].compareTo(wordsS[0]) < 0){
-            //myWriter.write(wordsR[0] +" : "+ wordsR[1]+"\n");
             merge(wordsR);
             return "readFromR";
 
@@ -98,6 +104,7 @@ public class Main{
         buffer.clear();
     }
 
+
     private static void readOnlyFromR() throws IOException {
         String[] prev = wordsR;
         merge(wordsR);
@@ -107,18 +114,19 @@ public class Main{
                 prev = wordsR;
                 merge(wordsR);
             }else{
-                System.out.println("Max Buffer: "+maxBufferSize);
-                myWriter.close();
-                System.exit(0);
+                break;
             }
         }
+        System.out.println("Max Buffer: "+maxBufferSize);
+        myWriter.close();
+        System.exit(0);
     }
 
 
     private static void merge(String[] words) throws IOException {
         if(!buffer.isEmpty()){
             for (String string : buffer) {
-                myWriter.write(words[0] + " : " +words[1] + " : " +string + "\n");      
+                myWriter.write(words[0] + "\t" +words[1] + "\t" +string + "\n");      
             }
         }
     }
