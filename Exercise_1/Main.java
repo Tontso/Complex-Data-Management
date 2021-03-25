@@ -22,9 +22,9 @@ public class Main{
     public static void main(String[] args) throws IOException{
         String readFrom= "";
 
-        fileReaderR = new Scanner(new File("Exercise_1\\TestFile1.txt"));
-        fileReaderS = new Scanner(new File("Exercise_1\\TestFile2.txt"));
-        myWriter = new FileWriter("Ex1.txt");
+        fileReaderR = new Scanner(new File("R_sorted.tsv"));
+        fileReaderS = new Scanner(new File("S_sorted.tsv"));
+        myWriter = new FileWriter("RjoinS.tsv");
 
         if(!( fileReaderR.hasNextLine() || fileReaderS.hasNext())){
             System.out.println("One of the files is empty.");

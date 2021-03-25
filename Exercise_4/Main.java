@@ -22,7 +22,26 @@ public class Main {
 
         fileReaderR = new Scanner(new File("R_sorted.tsv"));
         fileReaderS = new Scanner(new File("S_sorted.tsv"));
-        myWriter = new FileWriter("myFileExercise4.txt");
+        myWriter = new FileWriter("RdifferenceS.tsv ");
+
+        if(fileReaderR.hasNextLine()){
+            if(!fileReaderS.hasNextLine()){
+                System.out.println("Second file is empty!");
+                wordsR = fileReaderR.nextLine().split("\\s+");
+                readOnlyFrom(fileReaderR, wordsR);
+                System.exit(0);
+            }
+            wordsR = fileReaderR.nextLine().split("\\s+");
+        }
+        if(fileReaderS.hasNextLine()){
+            if(!fileReaderR.hasNextLine()){
+                System.out.println("First file is empty!");
+                wordsS = fileReaderS.nextLine().split("\\s+");
+                readOnlyFrom(fileReaderS, wordsS);
+                System.exit(0);
+            }
+            wordsS = fileReaderS.nextLine().split("\\s+");
+        }
 
         wordsR = fileReaderR.nextLine().split("\\s+");
         wordsS = fileReaderS.nextLine().split("\\s+");

@@ -14,7 +14,7 @@ public class Main {
 
         List<String[]> arrayList = new ArrayList<String[]>();
         Scanner fileReader = new Scanner(new File("R.tsv"));
-        FileWriter myWriter = new FileWriter("Ex5.txt");
+        FileWriter myWriter = new FileWriter("Rgroupby.tsv");
 
         while(fileReader.hasNext()){
             arrayList.add(fileReader.nextLine().split("\\s+"));
@@ -23,7 +23,7 @@ public class Main {
         //List<Integer> mySortedList = sorted(numbers);
         sort(arrayList);
         for (String[] line : arrayList){
-            myWriter.write(line[0]+" : "+line[1]+"\n");
+            myWriter.write(line[0]+"\t"+line[1]+"\n");
         }
         myWriter.close();
         
@@ -40,11 +40,11 @@ public class Main {
     
         sort(left);
         sort(right);
-        merge(left, right, list, mid);
+        merge(left, right, list);
     }
     
 
-    private static void merge(List<String[]> left, List<String[]> right, List<String[]> list, int mid) {
+    private static void merge(List<String[]> left, List<String[]> right, List<String[]> list) {
         int same = 0;
         int leftIndex = 0;
         int rightIndex = 0;

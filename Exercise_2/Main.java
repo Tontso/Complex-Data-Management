@@ -20,9 +20,9 @@ public class Main {
     public static void main(String[] args) throws IOException{
         String readFrom;
 
-        fileReaderR = new Scanner(new File("Exercise_2\\TestFileEx2.txt"));
-        fileReaderS = new Scanner(new File("Exercise_2\\TestFile2Ex2.txt"));
-        myWriter = new FileWriter("myFileExercise2.txt");
+        fileReaderR = new Scanner(new File("R_sorted.tsv"));
+        fileReaderS = new Scanner(new File("S_sorted.tsv"));
+        myWriter = new FileWriter("RunionS.tsv");
         
         // Read first Line
         if(!fileReaderR.hasNextLine() && !fileReaderS.hasNextLine()){

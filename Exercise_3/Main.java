@@ -22,7 +22,13 @@ public class Main {
 
         fileReaderR = new Scanner(new File("R_sorted.tsv"));
         fileReaderS = new Scanner(new File("S_sorted.tsv"));
-        myWriter = new FileWriter("myFileExercise3.txt");
+        myWriter = new FileWriter("RintersectionS.tsv");
+
+        if(!fileReaderR.hasNextLine() || !fileReaderS.hasNextLine()){
+            System.out.print("One file is empty!");
+            myWriter.close();
+            System.exit(0);
+        }
 
         wordsR = fileReaderR.nextLine().split("\\s+");
         wordsS = fileReaderS.nextLine().split("\\s+");
@@ -47,6 +53,7 @@ public class Main {
         }
     }
 
+    
     private static String[] checkForSameLinesInS() throws IOException {
         while(fileReaderS.hasNextLine()){
             wordsS = fileReaderS.nextLine().split("\\s+");
@@ -78,12 +85,12 @@ public class Main {
     }
 
 
-    private static String compareTwoStrings(String[] wordsR, String[] wordsS) {
+    private static String compareTwoStrings(String[] wordsR, String[] wordsS) throws IOException {
 
         // aa -- aa
         if(wordsR[0].equals(wordsS[0])) {
             if(wordsR[1].equals(wordsS[1])){      
-                System.out.println(wordsR[0] +" : "+ wordsR[1]);
+                myWriter.write(wordsR[0] +"\t"+ wordsR[1]+"\n");
                 return "readFromBoth";
             }else if(Integer.parseInt(wordsR[1]) < Integer.parseInt(wordsS[1])){
                 return "readFromR";
