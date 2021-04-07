@@ -16,6 +16,17 @@ class Main{
     public static void main(String[] args) throws FileNotFoundException {
         fileScannerOffset = new Scanner(new File("Exercise_1\\offsets.txt"));
         fileScannerCoord = new Scanner(new File("Exercise_1\\coords.txt"));
+        loadDataFromFile(); //load Data
+
+        // Find MBR and CENTER
+        for (Polygon item : allPolygons){
+            item.findMBR();
+            item.findCenter();
+        }
+    }
+
+
+    private static void loadDataFromFile(){
         String[] words;
         List<Double[]> tmpCoord = new ArrayList<>(); 
         while(fileScannerOffset.hasNext()){
@@ -28,13 +39,12 @@ class Main{
             tmpCoord.clear();
         }
 
-        for (Polygon pol: allPolygons){
-            if(pol.getId() == 1){
+        /* for (Polygon pol: allPolygons){
+            if(pol.getId() == 0){
                 for (Double[] xy : pol.getCoordinates()) {
                     System.out.println("x,y is:"+xy[0]+" : "+xy[1]);
                 }
-            }
-                
-        }
+            }       
+        } */
     }
 }
