@@ -3,6 +3,7 @@ package Exercise_1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -24,6 +25,9 @@ class Main{
             item.findCenter();
             item.findzOrderCode();
         }
+        //sort
+        Collections.sort(allPolygons,(a,b) -> a.getzOrderCode().compareTo(b.getzOrderCode()));
+       
     }
 
 

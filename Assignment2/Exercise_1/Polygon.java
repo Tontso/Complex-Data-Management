@@ -22,8 +22,14 @@ public class Polygon {
         return id;
     }
     
+    
     public List<Double[]> getCoordinates(){
         return coordinates;
+    }
+
+
+    public String getzOrderCode() {
+        return zOrderCode;
     }
 
 
@@ -100,4 +106,7 @@ public class Polygon {
         }
         zOrderCode = morton_code;
     }
+
+
+    
 }
