@@ -18,10 +18,11 @@ class Main{
         fileScannerCoord = new Scanner(new File("Exercise_1\\coords.txt"));
         loadDataFromFile(); //load Data
 
-        // Find MBR and CENTER
+        // Find MBR ,CENTER ,z-orderCode
         for (Polygon item : allPolygons){
             item.findMBR();
             item.findCenter();
+            item.findzOrderCode();
         }
     }
 
@@ -38,13 +39,5 @@ class Main{
             allPolygons.add(new Polygon(Integer.parseInt(words[0]), tmpCoord));
             tmpCoord.clear();
         }
-
-        /* for (Polygon pol: allPolygons){
-            if(pol.getId() == 0){
-                for (Double[] xy : pol.getCoordinates()) {
-                    System.out.println("x,y is:"+xy[0]+" : "+xy[1]);
-                }
-            }       
-        } */
     }
 }

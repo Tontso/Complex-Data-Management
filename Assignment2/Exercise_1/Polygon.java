@@ -9,6 +9,7 @@ public class Polygon {
     private List<Double[]> coordinates;
     private double[] mbr = new double[4]; // [x-low, x-high, y-low, y-high]
     private double[] center = new double[2];
+    private String zOrderCode;
 
 
     public Polygon(int id, List<Double[]> coordinates){
@@ -56,5 +57,47 @@ public class Polygon {
     public void findCenter() {
         center[0] = (mbr[0]+mbr[1])/2; // x
         center[1] = (mbr[2]+mbr[3])/2; // y
+    }
+
+
+    public void findzOrderCode() {
+        double tmp, x, y;
+        double lat = center[0];
+        double lng = center[1];
+        String morton_code = "";
+        int digit = 0;
+        List<Double> divisors = new ArrayList<>();
+
+        for (int i = 0; i < 32; i++) {
+            tmp = 180/Math.pow(2, i);
+            divisors.add(tmp);
+        }
+        
+        if (lng > 180)
+            x = (lng % 180) + 180.0;
+        else if (lng < -180)
+            x = (-((-lng) % 180)) + 180.0;
+        else
+            x = lng + 180.0;
+        if (lat > 90)
+            y = (lat % 90) + 90.0;
+        else if (lat < -90)
+            y = (-((-lat) % 90)) + 90.0;
+        else
+            y = lat + 90.0;
+
+        for (double dx : divisors){
+            digit = 0;
+            if (y >= dx){
+                digit |= 2;
+                y -= dx;
+            }
+            if (x >= dx){
+                digit |= 1;
+                x -= dx;
+            }
+            morton_code +=""+digit;
+        }
+        zOrderCode = morton_code;
     }
 }
