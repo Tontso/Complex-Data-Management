@@ -13,6 +13,8 @@ class Main{
     private static Scanner fileScannerCoord;
     private static Scanner fileScannerOffset;
     private static List<Polygon> allPolygons = new ArrayList<>();
+    private static List<Polygon> testPolygons = new ArrayList<>();
+    private static int M = 20;
 
     public static void main(String[] args) throws FileNotFoundException {
         fileScannerOffset = new Scanner(new File("Exercise_1\\offsets.txt"));
@@ -27,6 +29,26 @@ class Main{
         }
         //sort
         Collections.sort(allPolygons,(a,b) -> a.getzOrderCode().compareTo(b.getzOrderCode()));
+
+        RTree myTree = new RTree(M);     //make R-Tree
+
+        for (int i = 0; i < 10000; i++) {
+            testPolygons.add(allPolygons.get(0));
+        }
+        //Insert data into R-Tree
+        for (Polygon pol : testPolygons) {
+            myTree.insert(pol);
+        }
+        myTree.checkForLimits();
+        
+        //myTree.PrintNodeSize();
+        /* int mod;
+        int div;
+        mod = 10007%20;
+        div = 10007/20;
+        System.out.println("Mod: "+mod);
+        System.out.println("Div: "+div); */
+
        
     }
 

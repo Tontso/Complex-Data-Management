@@ -22,7 +22,7 @@ public class Polygon {
         return id;
     }
     
-    
+
     public List<Double[]> getCoordinates(){
         return coordinates;
     }
@@ -106,7 +106,4 @@ public class Polygon {
         }
         zOrderCode = morton_code;
     }
-
-
-    
 }
