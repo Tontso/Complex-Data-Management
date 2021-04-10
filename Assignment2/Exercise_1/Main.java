@@ -14,42 +14,47 @@ class Main{
     private static Scanner fileScannerOffset;
     private static List<Polygon> allPolygons = new ArrayList<>();
     private static List<Polygon> testPolygons = new ArrayList<>();
+    private static RTree myTree;
     private static int M = 20;
 
     public static void main(String[] args) throws FileNotFoundException {
         fileScannerOffset = new Scanner(new File("Exercise_1\\offsets.txt"));
         fileScannerCoord = new Scanner(new File("Exercise_1\\coords.txt"));
-        loadDataFromFile(); //load Data
-
-        // Find MBR ,CENTER ,z-orderCode
+        
+        // Load data from file
+        loadDataFromFile(); 
+      
+        // Find MBR ,CENTER ,z-orderCode for every polygon
         for (Polygon item : allPolygons){
             item.findMBR();
             item.findCenter();
             item.findzOrderCode();
         }
-        //sort
+        
+        //sort all polygons
         Collections.sort(allPolygons,(a,b) -> a.getzOrderCode().compareTo(b.getzOrderCode()));
 
-        RTree myTree = new RTree(M);     //make R-Tree
+        // load Data to R- Tree (leaf data)
+        loadDataToRtree();
+        myTree.checkForLimitsLeaf(0);
+        
+        // Construct R-Tree
+        myTree.cunstructRTree(0);
 
-        for (int i = 0; i < 10000; i++) {
+        myTree.printTree();
+    }
+
+
+    private static void loadDataToRtree() {
+        myTree = new RTree(M);     //make R-Tree
+
+        for (int i = 0; i < 16400; i++) {
             testPolygons.add(allPolygons.get(0));
         }
         //Insert data into R-Tree
         for (Polygon pol : testPolygons) {
             myTree.insert(pol);
         }
-        myTree.checkForLimits();
-        
-        //myTree.PrintNodeSize();
-        /* int mod;
-        int div;
-        mod = 10007%20;
-        div = 10007/20;
-        System.out.println("Mod: "+mod);
-        System.out.println("Div: "+div); */
-
-       
     }
 
 
