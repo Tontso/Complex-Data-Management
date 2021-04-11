@@ -1,7 +1,6 @@
 package Exercise_1;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,10 +38,10 @@ class Main{
 
         // load Data to R- Tree (leaf data)
         loadDataToRtree();
-        
         // Construct R-Tree
         myTree.cunstructRTree(0);
 
+        // Print and Write
         myTree.printTree();
         myTree.writeTreeToFile(writer);
         writer.close();
@@ -56,8 +55,7 @@ class Main{
         //Insert data into R-Tree
         for (Polygon pol : allPolygons) {
             myTree.insert(pol);
-        }
-
+        } 
     }
 
 

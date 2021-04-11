@@ -6,86 +6,118 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RTree {
 
     private static final AtomicInteger count = new AtomicInteger(-1); 
     Map<Integer, List<Node>> tree = new LinkedHashMap<Integer, List<Node>>();
-    //List<Node> tree = new ArrayList<Node>();
     Node currentNode;
     private int M;
     private int minSize; 
 
     public class Node{
         private int isnonleaf;
-        private int level;
         private int id;
-        private double[] mbr = new double [2];
         private Map<Integer,Double[]> data = new LinkedHashMap<Integer,Double[]>();
-        private List<Node> nodeData = new ArrayList<Node>();
 
-        public Node(int isnonleaf, int level){
+        public Node(int isnonleaf){
             this.isnonleaf = isnonleaf;
-            this.level = level;
             id = count.incrementAndGet();
+            if(id == 525)
+                System.out.println("ID: "+id );
+        }
+
+        public Double[] findNodeMBR(int key){
+            Double[] nodeMbr = new Double[4];
+            for ( Map.Entry<Integer, Double[]> mapElement : data.entrySet()) {             
+                nodeMbr[0] = mapElement.getValue()[0];
+                nodeMbr[1] = mapElement.getValue()[1];
+                nodeMbr[2] = mapElement.getValue()[2];
+                nodeMbr[3] = mapElement.getValue()[3];
+                break;             
+            }
+
+            for ( Map.Entry<Integer, Double[]> mapElement : data.entrySet()) {             
+                // x-low 
+                if(mapElement.getValue()[0] < nodeMbr[0]){
+                    nodeMbr[0] = mapElement.getValue()[0];
+                }
+                // x-high
+                if(mapElement.getValue()[1] > nodeMbr[1]){
+                    nodeMbr[1] = mapElement.getValue()[1];
+                }
+            
+                // y-low 
+                if(mapElement.getValue()[2]< nodeMbr[2]){
+                    nodeMbr[2] = mapElement.getValue()[2];
+                }
+
+                // y-high
+                if(mapElement.getValue()[3] > nodeMbr[3]){
+                    nodeMbr[3] = mapElement.getValue()[3];
+                }                   
+            }
+            return nodeMbr;
         }
     }
 
     public RTree(int M){
-        this.M =M;
+        this.M = M;
         minSize = (int)(0.4*M);
-        currentNode = new Node(0,0);
+        currentNode = new Node(0);
         tree.put(0,new ArrayList<Node>());
         tree.get(0).add(currentNode);
     }
     
     public void insert(Polygon polygon){
         if(currentNode.data.size() == M){
-            currentNode = new Node(0,0);
+            currentNode = new Node(0);
             tree.get(0).add(currentNode);
         }
         currentNode.data.put(polygon.getId(), polygon.getMbr()); 
-        //System.out.println(polygon.getId());
-        //System.out.println(currentNode.data.get(polygon.getId())[0]);
     }
 
 
-    /* public void checkForLimitsLeaf(int level) {
-        if(tree.get(level).get(tree.get(level).size()-1).data.size() < minSize){
-            while(tree.get(level).get(tree.get(level).size()-1).data.size() < minSize){
-                tree.get(level).get(tree.get(level).size()-1).data.add(tree.get(level).get(tree.get(level).size()-2).data.remove(tree.get(level).get(tree.get(level).size()-2).data.size()-1));
-            }
-        }
-    } */
     public void checkForLimits(int level) {
-        if(tree.get(level).get(tree.get(level).size()-1).nodeData.size() < minSize){
-            while(tree.get(level).get(tree.get(level).size()-1).nodeData.size() < minSize){
-                tree.get(level).get(tree.get(level).size()-1).nodeData.add(tree.get(level).get(tree.get(level).size()-2).nodeData.remove(tree.get(level).get(tree.get(level).size()-2).nodeData.size()-1));
+        
+        while(tree.get(level).get(tree.get(level).size()-1).data.size() < minSize){
+            int count = 1;
+            for(Map.Entry<Integer, Double[]> element : tree.get(level).get(tree.get(level).size()-2).data.entrySet()){
+                if(count == tree.get(level).get(tree.get(level).size()-2).data.size()){
+                    tree.get(level).get(tree.get(level).size()-1).data.put(element.getKey(), element.getValue());
+                    tree.get(level).get(tree.get(level).size()-2).data.remove(element.getKey());
+                    continue;
+                }
+                count++;
             }
         }
+        
     }
 
     public void cunstructRTree(int key) {
+        this.checkForLimits(key);
         tree.put(key+1,new ArrayList<Node>());
-        currentNode = new Node(1,key+1);
+        currentNode = new Node(1);
         for (Node node : tree.get(key)) {
-            currentNode.nodeData.add(node);
-            if(currentNode.nodeData.size() == M){
+            if(currentNode == null)
+                currentNode = new Node(1);
+            currentNode.data.put(node.id, node.findNodeMBR(key));
+            if(currentNode.data.size() == M){
                 tree.get(key+1).add(currentNode);
-                currentNode = new Node(1,key+1);
+                currentNode = null;
             }
         }
-        if(currentNode.nodeData.size() != 0){
-            tree.get(key+1).add(currentNode);
-        }
-        if(tree.get(key+1).size() == 1){
+        if(currentNode != null)
+            if(currentNode.data.size() != 0)
+                tree.get(key+1).add(currentNode);
+        
+        if(tree.get(key+1).size() == 1)
             return;
-        }else{
-            this.checkForLimits(key+1);
+        else
             this.cunstructRTree(key+1);
-        }
+        
     }
 
     public void printTree(){
@@ -96,16 +128,23 @@ public class RTree {
 
 
     public void writeTreeToFile(FileWriter writer) throws IOException {
+        String line = "";
         for (Integer key : tree.keySet()) {
             for (Node node : tree.get(key)) {
                 writer.write("["+node.isnonleaf+" ,"+node.id+", [");
                 for ( Map.Entry<Integer, Double[]> mapElement : node.data.entrySet()) {
-                    writer.write("["+mapElement.getKey()+" ,["+mapElement.getValue()[0]+" ,"+mapElement.getValue()[1]+" ,"+mapElement.getValue()[2]+" ,"+mapElement.getValue()[3]+"]], ");
-                }              
-                writer.write("]] \n");
+                    line = line +"["+mapElement.getKey()+" ,["+mapElement.getValue()[0]+" ,"+mapElement.getValue()[1]+" ,"+mapElement.getValue()[2]+" ,"+mapElement.getValue()[3]+"]], ";                  
+                }
+                if(line.endsWith(", "))
+                    line = line.substring(0, line.length()-2);
+                line = line+"]] \n";
+                writer.write(line);
+                line = "";             
             }
         }
     }
+
+   
 
        
 }
