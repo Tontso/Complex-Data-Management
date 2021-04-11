@@ -7,7 +7,7 @@ public class Polygon {
 
     private int id;
     private List<Double[]> coordinates;
-    private double[] mbr = new double[4]; // [x-low, x-high, y-low, y-high]
+    private Double[] mbr = new Double[4]; // [x-low, x-high, y-low, y-high]
     private double[] center = new double[2];
     private String zOrderCode;
 
@@ -31,6 +31,15 @@ public class Polygon {
     public String getzOrderCode() {
         return zOrderCode;
     }
+
+    public Double[] getMbr() {
+        return mbr;
+    }
+
+    public double[] getCenter(){
+        return center;
+    }
+    
 
 
     public void findMBR() {
@@ -106,4 +115,7 @@ public class Polygon {
         }
         zOrderCode = morton_code;
     }
+
+
+    
 }

@@ -1,14 +1,18 @@
 package Exercise_1;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RTree {
 
     private static final AtomicInteger count = new AtomicInteger(-1); 
-    HashMap<Integer, List<Node>> tree = new HashMap<Integer, List<Node>>();
+    Map<Integer, List<Node>> tree = new LinkedHashMap<Integer, List<Node>>();
     //List<Node> tree = new ArrayList<Node>();
     Node currentNode;
     private int M;
@@ -19,7 +23,7 @@ public class RTree {
         private int level;
         private int id;
         private double[] mbr = new double [2];
-        private List<Polygon> data = new ArrayList<Polygon>();
+        private Map<Integer,Double[]> data = new LinkedHashMap<Integer,Double[]>();
         private List<Node> nodeData = new ArrayList<Node>();
 
         public Node(int isnonleaf, int level){
@@ -42,17 +46,19 @@ public class RTree {
             currentNode = new Node(0,0);
             tree.get(0).add(currentNode);
         }
-        currentNode.data.add(polygon); // THELEI DIORTHORSH !!
+        currentNode.data.put(polygon.getId(), polygon.getMbr()); 
+        //System.out.println(polygon.getId());
+        //System.out.println(currentNode.data.get(polygon.getId())[0]);
     }
 
 
-    public void checkForLimitsLeaf(int level) {
+    /* public void checkForLimitsLeaf(int level) {
         if(tree.get(level).get(tree.get(level).size()-1).data.size() < minSize){
             while(tree.get(level).get(tree.get(level).size()-1).data.size() < minSize){
                 tree.get(level).get(tree.get(level).size()-1).data.add(tree.get(level).get(tree.get(level).size()-2).data.remove(tree.get(level).get(tree.get(level).size()-2).data.size()-1));
             }
         }
-    }
+    } */
     public void checkForLimits(int level) {
         if(tree.get(level).get(tree.get(level).size()-1).nodeData.size() < minSize){
             while(tree.get(level).get(tree.get(level).size()-1).nodeData.size() < minSize){
@@ -83,16 +89,21 @@ public class RTree {
     }
 
     public void printTree(){
-        /* for (Integer key : tree.keySet()) {
-            System.out.println("Level: "+key);
-            for (Node node : tree.get(key)) {
-                System.out.println("Node "+node.id +":  Size:"+node.data.size());
-            }
-        } */
-        
-        System.out.println("MinSize: "+minSize);
         for (Integer key : tree.keySet()) {
-            System.out.println("Level: "+key+" has size: "+tree.get(key).size());
+            System.out.println(tree.get(key).size() +" nodes at level "+key);
+        }
+    }
+
+
+    public void writeTreeToFile(FileWriter writer) throws IOException {
+        for (Integer key : tree.keySet()) {
+            for (Node node : tree.get(key)) {
+                writer.write("["+node.isnonleaf+" ,"+node.id+", [");
+                for ( Map.Entry<Integer, Double[]> mapElement : node.data.entrySet()) {
+                    writer.write("["+mapElement.getKey()+" ,["+mapElement.getValue()[0]+" ,"+mapElement.getValue()[1]+" ,"+mapElement.getValue()[2]+" ,"+mapElement.getValue()[3]+"]], ");
+                }              
+                writer.write("]] \n");
+            }
         }
     }
 
