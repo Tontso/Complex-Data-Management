@@ -13,6 +13,7 @@ public class RTree {
 
     private static final AtomicInteger count = new AtomicInteger(-1); 
     Map<Integer, List<Node>> tree = new LinkedHashMap<Integer, List<Node>>();
+    List<Node> listTree;
     Node currentNode;
     private int M;
     private int minSize; 
@@ -24,9 +25,26 @@ public class RTree {
 
         public Node(int isnonleaf){
             this.isnonleaf = isnonleaf;
-            id = count.incrementAndGet();
-            if(id == 525)
-                System.out.println("ID: "+id );
+            id = count.incrementAndGet();  
+        }
+
+        public Node(String[] line) {
+            isnonleaf = Integer.parseInt(line[0]);
+            id = Integer.parseInt(line[1]);
+            Double[] tmp;
+            for (int i = 2; i < line.length; i+=5) {
+                tmp = new Double[4];
+                tmp[0] = Double.parseDouble(line[i+1]);
+                tmp[1] = Double.parseDouble(line[i+2]);
+                tmp[2] = Double.parseDouble(line[i+3]);
+                tmp[3] = Double.parseDouble(line[i+4]);
+                
+                data.put(Integer.parseInt(line[i]),tmp);
+            }
+        }
+
+        public Map<Integer, Double[]> getData() {
+            return data;
         }
 
         public Double[] findNodeMBR(int key){
@@ -60,7 +78,7 @@ public class RTree {
                 }                   
             }
             return nodeMbr;
-        }
+        }       
     }
 
     public RTree(int M){
@@ -70,6 +88,16 @@ public class RTree {
         tree.put(0,new ArrayList<Node>());
         tree.get(0).add(currentNode);
     }
+
+    public RTree(){
+        listTree = new ArrayList<>();
+    }
+
+    public List<Node> getListTree(){
+        return listTree;
+    }
+
+    
     
     public void insert(Polygon polygon){
         if(currentNode.data.size() == M){
@@ -96,6 +124,7 @@ public class RTree {
         
     }
 
+    
     public void cunstructRTree(int key) {
         this.checkForLimits(key);
         tree.put(key+1,new ArrayList<Node>());
@@ -142,6 +171,70 @@ public class RTree {
                 line = "";             
             }
         }
+    }
+
+// ###################################### PART-2 ####################################################
+
+
+    public void cunstructRTreeFromFile(String[] line){
+        currentNode = new Node(line);
+        listTree.add(currentNode);
+    }
+
+
+    public void checkQuery(Double[] query) {
+        List<Node> searchNodes = new ArrayList<>();
+        List<Integer> okQuery = new ArrayList<>();
+        Node node = listTree.get(listTree.size()-1); // root
+        searchNodes.add(node);
+
+        while(!searchNodes.isEmpty()){
+            if(node.isnonleaf == 1){
+                for(Integer key : node.data.keySet()){
+                    if(checkX(node.data.get(key), query)  && checkY(node.data.get(key), query))
+                        searchNodes.add(listTree.get(key));                
+                }
+                searchNodes.remove(0);
+                node = searchNodes.get(0);
+            }else{
+                for(Integer key : node.data.keySet()){
+                    if(checkX(node.data.get(key), query)  && checkY(node.data.get(key), query))
+                        okQuery.add(key);               
+                }
+                searchNodes.remove(0);
+                if(!searchNodes.isEmpty())
+                    node = searchNodes.get(0);
+            }
+        }
+        for (Integer integer : okQuery) {
+            //if((integer == 2527) || (integer == 2712) || (integer == 8371) || (integer == 5042) ||(integer == 7080) || (integer == 7944) || (integer ==7656))
+            System.out.println(integer);
+        }
+    }
+
+
+    private boolean checkX(Double[] treeCorr, Double[] queryCorr) {
+        // (xq-low < xt-low) and (xq-high >= xt-low)
+        if((queryCorr[0] <= treeCorr[0]) && queryCorr[2] > treeCorr[0])
+               return true;
+
+        // xquery > xtree (inside) 
+        if((queryCorr[0] > treeCorr[0]) && (queryCorr[0] <= treeCorr[1])) // DEN THELEI ELEGXOS X-HIGHT
+            return true;
+        
+        return false;
+    }
+
+    private boolean checkY(Double[] treeCorr, Double[] queryCorr) {
+        // (yq-low < yt-low) and (yq-high >= yt-low)
+        if((queryCorr[1] <= treeCorr[2]) && queryCorr[3] >= treeCorr[2])
+               return true;
+
+        // (yq-low > yt-low) and (yq-low <= yt-ght)
+        if((queryCorr[1] > treeCorr[2]) && (queryCorr[1] <= treeCorr[3])) // DEN THELEI ELEGXOS X-HIGHT
+            return true;
+        
+        return false;
     }
 
    

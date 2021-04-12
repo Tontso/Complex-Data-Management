@@ -14,7 +14,6 @@ class Main{
     private static Scanner fileScannerCoord;
     private static Scanner fileScannerOffset;
     private static List<Polygon> allPolygons = new ArrayList<>();
-    //private static List<Polygon> testPolygons = new ArrayList<>();
     private static RTree myTree;
     private static int M = 20;
 
@@ -51,7 +50,6 @@ class Main{
 
     private static void loadDataToRtree() {
         myTree = new RTree(M);     //make R-Tree
-
         //Insert data into R-Tree
         for (Polygon pol : allPolygons) {
             myTree.insert(pol);
