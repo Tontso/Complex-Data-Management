@@ -2,6 +2,7 @@ package Exercise_2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -18,13 +19,26 @@ public class Exercise2 {
         fileRtree = new Scanner(new File("Rtree.txt"));
         Double[] query ;
         RTree tree = new RTree();
+        int queryCount = 0;
 
         loadRtreeFromFile(fileRtree,tree);
 
         while(fileRqueries.hasNextLine()){
             query = Stream.of(fileRqueries.nextLine().split(" ")).map(Double::valueOf).toArray(Double[]::new);
-            tree.checkQuery(query);
-            break;
+            printQueryResult(queryCount, tree.checkQuery(query));
+            queryCount++;
+        }
+    }
+
+    private static void printQueryResult(int queryCount,List<Integer> checkQuery) {
+        if(!checkQuery.isEmpty()){
+            System.out.print(queryCount+" ("+checkQuery.size()+"): ");
+            for (int i = 0; i < checkQuery.size()-1; i++) {
+                System.out.print(checkQuery.get(i)+",");
+            }
+            System.out.print(checkQuery.get(checkQuery.size()-1)+"\n");
+        }else{
+            System.out.println(queryCount+" (0):");
         }
     }
 
