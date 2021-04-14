@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.stream.Stream;
 
 
-class Main{
+class Exercise1{
     private static Scanner fileScannerCoord;
     private static Scanner fileScannerOffset;
     private static List<Polygon> allPolygons = new ArrayList<>();

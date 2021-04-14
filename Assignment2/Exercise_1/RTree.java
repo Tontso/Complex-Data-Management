@@ -14,7 +14,8 @@ public class RTree {
     List<Node> listTree;
     Node currentNode;
     private int M;
-    private int minSize; 
+    private int minSize;
+    private static List<Integer> okQuery = new ArrayList<>(); 
 
     
 
@@ -120,35 +121,28 @@ public class RTree {
     }
 
 
-    public List<Integer> checkQuery(Double[] query) {
-        List<Node> searchNodes = new ArrayList<>();
-        List<Integer> okQuery = new ArrayList<>();
-        Node node = listTree.get(listTree.size()-1); // root
-        searchNodes.add(node);
-
-        while(!searchNodes.isEmpty()){
-            if(node.getIsnonleaf() == 1){
-                for(Integer key : node.getData().keySet()){
-                    if(checkX(node.getData().get(key), query)  && checkY(node.getData().get(key), query))
-                        searchNodes.add(listTree.get(key));                
-                }
-                searchNodes.remove(0);
-                node = searchNodes.get(0);
-            }else{
-                for(Integer key : node.getData().keySet()){
-                    if(checkX(node.getData().get(key), query)  && checkY(node.getData().get(key), query))
-                        okQuery.add(key);               
-                }
-                searchNodes.remove(0);
-                if(!searchNodes.isEmpty())
-                    node = searchNodes.get(0);
+    public static List<Integer> checkQuery(Double[] query,RTree tree,Node node) {
+        
+        if(node.getIsnonleaf() == 1){
+            for(Integer key : node.getData().keySet()){
+                if(checkX(node.getData().get(key), query)  && checkY(node.getData().get(key), query))
+                    checkQuery(query, tree, tree.getListTree().get(key));               
+            }
+        }else{
+            for(Integer key : node.getData().keySet()){
+                if(checkX(node.getData().get(key), query)  && checkY(node.getData().get(key), query))
+                    okQuery.add(key);               
             }
         }
         return okQuery;
     }
 
+    public void newListQuery(){
+        okQuery.clear();
+    }
 
-    private boolean checkX(Double[] treeCorr, Double[] queryCorr) {
+
+    private static boolean checkX(Double[] treeCorr, Double[] queryCorr) {
         // (xq-low < xt-low) and (xq-high >= xt-low)
         if((queryCorr[0] <= treeCorr[0]) && queryCorr[2] > treeCorr[0])
                return true;
@@ -160,7 +154,7 @@ public class RTree {
         return false;
     }
 
-    private boolean checkY(Double[] treeCorr, Double[] queryCorr) {
+    private static boolean checkY(Double[] treeCorr, Double[] queryCorr) {
         // (yq-low < yt-low) and (yq-high >= yt-low)
         if((queryCorr[1] <= treeCorr[2]) && queryCorr[3] >= treeCorr[2])
                return true;
