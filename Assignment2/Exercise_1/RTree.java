@@ -3,9 +3,11 @@ package Exercise_1;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 
 public class RTree {
@@ -15,7 +17,20 @@ public class RTree {
     Node currentNode;
     private int M;
     private int minSize;
-    private static List<Integer> okQuery = new ArrayList<>(); 
+    private static List<Integer> okQuery = new ArrayList<>();
+    
+    class CustomComparator implements Comparator<Node>{
+
+        @Override
+        public int compare(Node o1, Node o2) {
+            if(o1.getDistance() > o2.getDistance())
+                return 1;
+            else if(o1.getDistance() < o2.getDistance())
+                return -1;
+            else
+                return 0;
+        }   
+    }
 
     
 
@@ -164,6 +179,48 @@ public class RTree {
             return true;
         
         return false;
+    }
+
+
+    // ###################################### PART-3 ####################################################
+    
+    public void bestFirstknn(Double[] query, RTree tree, Node root, int k) {
+        PriorityQueue<Node> pq = new PriorityQueue<>(new CustomComparator());
+        PriorityQueue<Integer> kNeighbor = new PriorityQueue<>(8);
+        Node currentNode;
+        Node child; 
+        double minDistance = Double.POSITIVE_INFINITY;
+        int minDisNodeId = 50000;
+        
+        for(Integer key : root.getData().keySet()){
+            child = tree.getListTree().get(key);
+            child.setDistance(root.getData().get(key), query);
+            pq.add(tree.getListTree().get(key));          
+        }
+        
+        while((!pq.isEmpty() && pq.peek().getDistance() < minDistance)){
+            currentNode = pq.poll();
+            if(currentNode.getIsnonleaf() == 1){
+                for(Integer key : currentNode.getData().keySet()){
+                    tree.getListTree().get(key).setDistance(currentNode.getData().get(key), query); //Calculate distance
+                    if(tree.getListTree().get(key).getDistance() < minDistance)
+                        pq.add(tree.getListTree().get(key));          
+                }
+            }else{
+                for(Integer key : currentNode.getData().keySet()){
+                    currentNode.setDistance(currentNode.getData().get(key), query);
+                    if(currentNode.getDistance() < minDistance){
+                        //if(key != 9311 && key != 7001 &&  key!= 803 &&  key!= 5361){
+                        minDistance = currentNode.getDistance();
+                        minDisNodeId = key;
+                        kNeighbor.add(key);
+                        //}
+                    }
+                }
+            }
+        }
+        System.out.println("Min distance with ID: "+minDisNodeId); 
+
     }
 
    

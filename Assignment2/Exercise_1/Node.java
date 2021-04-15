@@ -10,6 +10,8 @@ public class Node{
     private int isnonleaf;
     private int id;
     private Map<Integer,Double[]> data = new LinkedHashMap<Integer,Double[]>();
+    private double distance = 1000;
+    
 
 
     public Node(int isnonleaf){
@@ -46,8 +48,16 @@ public class Node{
     public int getIsnonleaf() {
         return isnonleaf;
     }
-    
 
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double[] mbr, Double[] point) {
+        this.distance = distanceBoxParticle2D(point[0], point[1], mbr[0],mbr[2], mbr[1], mbr[3]);
+    }
+    
 
     public Double[] findNodeMBR(int key){
         Double[] nodeMbr = new Double[4];
@@ -80,6 +90,27 @@ public class Node{
             }                   
         }
         return nodeMbr;
+    }
+
+    public static double distanceBoxParticle2D(double x, double y, double x_min, double y_min, double x_max, double y_max){
+        if (x < x_min) {
+            if (y <  y_min) return HYPOT(x_min-x, y_min-y);
+            if (y <= y_max) return x_min - x;
+                            return HYPOT(x_min-x, y_max-y);
+        } else if (x <= x_max) {
+            if (y <  y_min) return y_min - y;
+            if (y <= y_max) return 0;
+                            return y - y_max;
+        } else {
+            if (y <  y_min) return HYPOT(x_max-x, y_min-y);
+            if (y <= y_max) return x - x_max;
+                            return HYPOT(x_max-x, y_max-y);
+        }
+    }
+
+
+    private static double HYPOT(double x, double y) {
+        return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
     }
       
 }
