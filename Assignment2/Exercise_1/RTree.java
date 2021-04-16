@@ -2,12 +2,19 @@ package Exercise_1;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 
 public class RTree {
@@ -32,6 +39,13 @@ public class RTree {
         }   
     }
 
+    class CustomComparatorNeightbor implements Comparator<Double[]>{
+
+        @Override
+        public int compare(Double[] o1, Double[] o2) {
+            return Double.compare(o1[0], o2[0]);
+        }
+    }
     
 
     public RTree(int M){
@@ -186,11 +200,12 @@ public class RTree {
     
     public void bestFirstknn(Double[] query, RTree tree, Node root, int k) {
         PriorityQueue<Node> pq = new PriorityQueue<>(new CustomComparator());
-        PriorityQueue<Integer> kNeighbor = new PriorityQueue<>(8);
+        LinkedList<Double[]> kNeighbor = new LinkedList<Double[]>();
         Node currentNode;
         Node child; 
         double minDistance = Double.POSITIVE_INFINITY;
         int minDisNodeId = 50000;
+        Double[] tmp;
         
         for(Integer key : root.getData().keySet()){
             child = tree.getListTree().get(key);
@@ -198,7 +213,7 @@ public class RTree {
             pq.add(tree.getListTree().get(key));          
         }
         
-        while((!pq.isEmpty() && pq.peek().getDistance() < minDistance)){
+        while(!pq.isEmpty() && pq.peek().getDistance() < minDistance){
             currentNode = pq.poll();
             if(currentNode.getIsnonleaf() == 1){
                 for(Integer key : currentNode.getData().keySet()){
@@ -209,17 +224,42 @@ public class RTree {
             }else{
                 for(Integer key : currentNode.getData().keySet()){
                     currentNode.setDistance(currentNode.getData().get(key), query);
-                    if(currentNode.getDistance() < minDistance){
-                        //if(key != 9311 && key != 7001 &&  key!= 803 &&  key!= 5361){
-                        minDistance = currentNode.getDistance();
-                        minDisNodeId = key;
-                        kNeighbor.add(key);
-                        //}
-                    }
+                    if(currentNode.getDistance() < minDistance)
+                            minDistance = currentNode.getDistance();
+                    
+                    minDistance = currentNode.getDistance();
+                    minDisNodeId = key;
+                    tmp = new Double[]{minDistance,(double)key};
+                    addValue(kNeighbor,tmp);
+                    if(kNeighbor.size() == (k+1))
+                        kNeighbor.removeLast();     
                 }
             }
         }
-        System.out.println("Min distance with ID: "+minDisNodeId); 
+        /* Collections.sort(kNeighbor,new Comparator<Double[]>() {
+            public int compare(Double[] strings, Double[] otherStrings) {
+                return strings[0].compareTo(otherStrings[0]);
+            }
+        }); */
+        System.out.println("Min distance with ID: "+minDisNodeId+" : "+minDistance); 
+
+    }
+
+    private static void addValue(LinkedList<Double[]> list,Double[] val) {
+
+        if (list.size() == 0) {
+            list.add(val);
+        } else if (list.get(0)[0] > val[0]) {
+            list.add(0, val);
+        } else if (list.get(list.size() - 1)[0] < val[0]) {
+            list.add(list.size(), val);
+        } else {
+            int i = 0;
+            while (list.get(i)[0] < val[0]) {
+                i++;
+            }
+            list.add(i, val);
+        }
 
     }
 
