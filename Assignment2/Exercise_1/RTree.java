@@ -1,8 +1,9 @@
-package Exercise_1;
+
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -140,8 +141,9 @@ public class RTree {
         }
     }
 
-// ###################################### PART-2 ####################################################
 
+
+// #################################################### PART-2 ####################################################
 
     public void cunstructRTreeFromFile(String[] line){
         currentNode = new Node(line);
@@ -165,6 +167,7 @@ public class RTree {
         return okQuery;
     }
 
+
     public void newListQuery(){
         okQuery.clear();
     }
@@ -182,6 +185,7 @@ public class RTree {
         return false;
     }
 
+
     private static boolean checkY(Double[] treeCorr, Double[] queryCorr) {
         // (yq-low < yt-low) and (yq-high >= yt-low)
         if((queryCorr[1] <= treeCorr[2]) && queryCorr[3] >= treeCorr[2])
@@ -195,23 +199,18 @@ public class RTree {
     }
 
 
-    // ###################################### PART-3 ####################################################
+
+    // #################################################### PART-3 ####################################################
     
-    public void bestFirstknn(Double[] query, RTree tree, Node root, int k) {
+    public String bestFirstknn(Double[] query, RTree tree, Node root, int k) {
         PriorityQueue<Node> pq = new PriorityQueue<>(new CustomComparator());
         PriorityQueue<Double[]>kNeighbor = new PriorityQueue<>(new CustomComparatorNeightbor());
+        List<Double> dis = new ArrayList<>();
         Node currentNode;
         Node child; 
         double minDistance = Double.POSITIVE_INFINITY;
-        int minDisNodeId = 50000;
 
-       
-
-        
-      
-
-        
-        
+ 
         for(Integer key : root.getData().keySet()){
             child = tree.getListTree().get(key);
             child.setDistance(root.getData().get(key), query);
@@ -231,6 +230,7 @@ public class RTree {
                     currentNode.setDistance(currentNode.getData().get(key), query);
                     if(currentNode.getDistance() < minDistance)
                             minDistance = currentNode.getDistance();
+                    dis.add(currentNode.getDistance());         // TEST
                     minDistance = currentNode.getDistance();
                     kNeighbor.add(new Double[]{minDistance,(double)key});
                     if(kNeighbor.size() == (k+1))
@@ -238,17 +238,14 @@ public class RTree {
                 }
             }
         }
-        /* Collections.sort(kNeighbor,new Comparator<Double[]>() {
-            public int compare(Double[] strings, Double[] otherStrings) {
-                return strings[0].compareTo(otherStrings[0]);
-            }
-        }); */
+        Collections.sort(dis,(a,b) -> a.compareTo(b));
+
         String str ="";
         while(!kNeighbor.isEmpty())
             str = ","+kNeighbor.poll()[1].intValue()+ str;
         
         str = str.substring(1,str.length());
-        System.out.println(str);
+        return str;
 
     }
        

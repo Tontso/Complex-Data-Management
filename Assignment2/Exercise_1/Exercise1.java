@@ -1,4 +1,4 @@
-package Exercise_1;
+
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,6 +14,7 @@ class Exercise1{
     private static Scanner fileScannerCoord;
     private static Scanner fileScannerOffset;
     private static List<Polygon> allPolygons = new ArrayList<>();
+    private static List<Polygon> testPolygons = new ArrayList<>();
     private static RTree myTree;
     private static int M = 20;
 
@@ -35,8 +36,20 @@ class Exercise1{
         //sort all polygons
         Collections.sort(allPolygons,(a,b) -> a.getzOrderCode().compareTo(b.getzOrderCode()));
 
+        //############################# TEST ###########################################
+        /* for (int i = 0; i < 10021; i++) {
+            testPolygons.add(new Polygon(i, allPolygons.get(0).getCoordinates()));
+        }
+        for (Polygon item : testPolygons){
+            item.findMBR();
+            item.findCenter();
+            item.findzOrderCode();
+        } */
+        //##############################################################################
+
         // load Data to R- Tree (leaf data)
         loadDataToRtree();
+
         // Construct R-Tree
         myTree.cunstructRTree(0);
 
@@ -51,7 +64,7 @@ class Exercise1{
     private static void loadDataToRtree() {
         myTree = new RTree(M);     //make R-Tree
         //Insert data into R-Tree
-        for (Polygon pol : allPolygons) {
+        for (Polygon pol : allPolygons){
             myTree.insert(pol);
         } 
     }
