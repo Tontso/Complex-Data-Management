@@ -11,7 +11,7 @@ public class Exercise3 {
     
     public static void main(String[] args) throws FileNotFoundException{
         fileRtree = new Scanner(new File("Rtree.txt"));
-        fileNNqueries = new Scanner(new File("Exercise_1\\NNqueries.txt"));
+        fileNNqueries = new Scanner(new File("NNqueries.txt"));
         RTree tree = new RTree();
         int k = 10;
         Double[] query;
@@ -21,7 +21,7 @@ public class Exercise3 {
         
         while(fileNNqueries.hasNext()){
             query = Stream.of(fileNNqueries.nextLine().split(" ")).map(Double::valueOf).toArray(Double[]::new);
-            System.out.println((queryCount+": "+tree.bestFirstknn(query,tree, tree.listTree.get(tree.getListTree().size()-1), k)));
+            System.out.println((queryCount+": "+tree.bestFirstknn(query,tree, tree.getRoot(), k)));
             queryCount++;
         }  
     }

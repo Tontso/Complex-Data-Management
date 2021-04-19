@@ -10,7 +10,7 @@ public class Node{
     private int isnonleaf;
     private int id;
     private Map<Integer,Double[]> data = new LinkedHashMap<Integer,Double[]>();
-    private double distance = 1000;
+    private double distance;
     
 
 

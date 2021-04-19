@@ -1,4 +1,5 @@
-
+// Tontso Tontsev
+// AM 3168
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.PriorityQueue;
 public class RTree {
 
     Map<Integer, List<Node>> tree;
-    List<Node> listTree;
+    Map<Integer, Node> listTree;
     Node currentNode;
     private int M;
     private int minSize;
@@ -58,11 +59,11 @@ public class RTree {
     }
 
     public RTree(){
-        listTree = new ArrayList<>();
+        listTree = new LinkedHashMap<Integer, Node>();
     }
 
 
-    public List<Node> getListTree(){
+    public Map<Integer,Node> getListTree(){
         return listTree;
     }
 
@@ -76,7 +77,7 @@ public class RTree {
     }
 
 
-    public void checkForLimits(int level) {
+    private void checkForLimits(int level) {
         
         while(tree.get(level).get(tree.get(level).size()-1).getData().size() < minSize){
             int count = 1;
@@ -93,7 +94,7 @@ public class RTree {
     }
 
     
-    public void cunstructRTree(int key) {
+    public void constructRTree(int key) {
         this.checkForLimits(key);
         tree.put(key+1,new ArrayList<Node>());
         currentNode = new Node(1);
@@ -113,13 +114,18 @@ public class RTree {
         if(tree.get(key+1).size() == 1)
             return;
         else
-            this.cunstructRTree(key+1);
-        
+            this.constructRTree(key+1); 
     }
 
     public void printTree(){
         for (Integer key : tree.keySet()) {
             System.out.println(tree.get(key).size() +" nodes at level "+key);
+            //############################# TEST ###########################################
+            /* for (Node node : tree.get(key)) {
+                System.out.print(node.getData().size()+", ");
+            }
+            System.out.println("\n"); */
+            //##############################################################################
         }
     }
 
@@ -147,7 +153,18 @@ public class RTree {
 
     public void cunstructRTreeFromFile(String[] line){
         currentNode = new Node(line);
-        listTree.add(currentNode);
+        listTree.put(currentNode.getId(),currentNode);
+    }
+
+    public Node getRoot(){
+        int count =1;
+        for(Map.Entry<Integer,Node> n : listTree.entrySet()){
+            if(count == listTree.size())
+                return n.getValue();
+            count++;
+        }
+        //Just for compiler
+        return null;
     }
 
 

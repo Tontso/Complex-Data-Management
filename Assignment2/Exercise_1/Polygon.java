@@ -1,4 +1,5 @@
-
+// Tontso Tontsev
+// AM 3168
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +64,6 @@ public class Polygon {
                 mbr[3] = array[1];
             }
         }
-        /* for (int i = 0; i < mbr.length; i++) {
-            System.out.println(mbr[i]);
-        } */
     }
 
 

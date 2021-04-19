@@ -1,4 +1,5 @@
-
+// Tontso Tontsev
+// AM 3168
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,17 +11,16 @@ import java.util.Scanner;
 import java.util.stream.Stream;
 
 
-class Exercise1{
+public class Exercise1{
     private static Scanner fileScannerCoord;
     private static Scanner fileScannerOffset;
     private static List<Polygon> allPolygons = new ArrayList<>();
-    private static List<Polygon> testPolygons = new ArrayList<>();
     private static RTree myTree;
     private static int M = 20;
 
     public static void main(String[] args) throws IOException {
-        fileScannerOffset = new Scanner(new File("Exercise_1\\offsets.txt"));
-        fileScannerCoord = new Scanner(new File("Exercise_1\\coords.txt"));
+        fileScannerOffset = new Scanner(new File("offsets.txt"));
+        fileScannerCoord = new Scanner(new File("coords.txt"));
         FileWriter writer = new FileWriter(new File("Rtree.txt")); 
         
         // Load data from file
@@ -37,7 +37,7 @@ class Exercise1{
         Collections.sort(allPolygons,(a,b) -> a.getzOrderCode().compareTo(b.getzOrderCode()));
 
         //############################# TEST ###########################################
-        /* for (int i = 0; i < 10021; i++) {
+        /* for (int i = 0; i < N; i++) {
             testPolygons.add(new Polygon(i, allPolygons.get(0).getCoordinates()));
         }
         for (Polygon item : testPolygons){
@@ -47,17 +47,21 @@ class Exercise1{
         } */
         //##############################################################################
 
-        // load Data to R- Tree (leaf data)
-        loadDataToRtree();
+        
+        if(allPolygons.size() >= (int)(M*0.4)){
+            // load Data to R- Tree (leaf data)
+            loadDataToRtree();
 
-        // Construct R-Tree
-        myTree.cunstructRTree(0);
+            // Construct R-Tree
+            myTree.constructRTree(0);
 
-        // Print and Write
-        myTree.printTree();
-        myTree.writeTreeToFile(writer);
-        writer.close();
-
+            // Print and Write
+            myTree.printTree();
+            myTree.writeTreeToFile(writer);
+            writer.close();
+        }else{
+            System.out.println("Too few elements: "+allPolygons.size()+" the limit is: "+(int)(M*0.4));
+        }
     }
 
 
