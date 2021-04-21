@@ -38,9 +38,9 @@ public class RTree {
 
         @Override
         public int compare(Double[] o1, Double[] o2) {
-            if(o1[0] < o2[0])
+            if(o1[0] > o2[0])
                 return 1;
-            else if(o1[0] > o2[0])
+            else if(o1[0] < o2[0])
                 return -1;
             else
                 return 0;
@@ -219,48 +219,44 @@ public class RTree {
     // #################################################### PART-3 ####################################################
     
     public String bestFirstknn(Double[] query, RTree tree, Node root, int k) {
-        PriorityQueue<Node> pq = new PriorityQueue<>(new CustomComparator());
-        PriorityQueue<Double[]>kNeighbor = new PriorityQueue<>(new CustomComparatorNeightbor());
+        PriorityQueue<Double[]> pq = new PriorityQueue<>(new CustomComparatorNeightbor());
         Node currentNode;
-        Node child; 
-        double minDistance = Double.POSITIVE_INFINITY;
+        double distance = Double.POSITIVE_INFINITY;
+        int count = 0;
+        String returnString = "";
+
 
  
         for(Integer key : root.getData().keySet()){
-            child = tree.getListTree().get(key);
-            child.setDistance(root.getData().get(key), query);
-            pq.add(tree.getListTree().get(key));          
+            currentNode = tree.getListTree().get(key);
+            currentNode.setDistance(root.getData().get(key), query);
+            distance = currentNode.getDistance();
+            pq.add(new Double[]{distance, (double)key, (double)currentNode.getIsnonleaf()});          
         }
         
-        while((!pq.isEmpty()) && kNeighbor.size() <= k){
-            currentNode = pq.poll();
-            if(currentNode.getIsnonleaf() == 1){
+        while(!pq.isEmpty() && count != k){
+            Double[] head = pq.poll();
+            if(head[2] == 1.0){ //Has NODES
+                currentNode = tree.getListTree().get(head[1].intValue());
                 for(Integer key : currentNode.getData().keySet()){
                     tree.getListTree().get(key).setDistance(currentNode.getData().get(key), query); //Calculate distance
-                    //if(tree.getListTree().get(key).getDistance() < minDistance)
-                    pq.add(tree.getListTree().get(key));          
+                    distance = tree.getListTree().get(key).getDistance();
+                    pq.add(new Double[]{distance, (double)key, (double)tree.getListTree().get(key).getIsnonleaf()});         
                 }
-            }else{
+            }else if(head[2] == 0.0){
+                currentNode = tree.getListTree().get(head[1].intValue());
                 for(Integer key : currentNode.getData().keySet()){
                     currentNode.setDistance(currentNode.getData().get(key), query);
-                    //if(currentNode.getDistance() < minDistance)
-                    //        minDistance = currentNode.getDistance();
-                    minDistance = currentNode.getDistance();
-                    kNeighbor.add(new Double[]{minDistance,(double)key});
-                    if(kNeighbor.size() == (k+1))
-                        kNeighbor.poll();    
+                    distance = currentNode.getDistance();
+                    pq.add(new Double[]{distance, (double)key, 2.0});  // Is polygon  
                 }
+            }else{
+                count++;
+                returnString += head[1].intValue()+","; 
+
             }
         }
-
-        //System.out.println(kNeighbor.size());
-        String str ="";
-        while(!kNeighbor.isEmpty())
-            str = ","+kNeighbor.poll()[1].intValue()+ str;
-        
-        str = str.substring(1,str.length());
-        return str;
-
+        return returnString.substring(0, returnString.length()-1);
     }
        
 }
