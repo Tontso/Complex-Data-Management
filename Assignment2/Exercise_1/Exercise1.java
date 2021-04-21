@@ -15,6 +15,7 @@ public class Exercise1{
     private static Scanner fileScannerCoord;
     private static Scanner fileScannerOffset;
     private static List<Polygon> allPolygons = new ArrayList<>();
+    private static List<Polygon> testPolygons = new ArrayList<>();
     private static RTree myTree;
     private static int M = 20;
 
@@ -37,7 +38,7 @@ public class Exercise1{
         Collections.sort(allPolygons,(a,b) -> a.getzOrderCode().compareTo(b.getzOrderCode()));
 
         //############################# TEST ###########################################
-        /* for (int i = 0; i < N; i++) {
+        /* for (int i = 0; i < 10001; i++) {
             testPolygons.add(new Polygon(i, allPolygons.get(0).getCoordinates()));
         }
         for (Polygon item : testPolygons){

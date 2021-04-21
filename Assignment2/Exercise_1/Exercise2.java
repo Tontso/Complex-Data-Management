@@ -46,7 +46,7 @@ public class Exercise2 {
         
         while(fileRtree.hasNextLine()){
             String[] line = fileRtree.nextLine().replace("[", "").replace("]", "").replace(" ", "").split(",");
-            tree.cunstructRTreeFromFile(line);
+            tree.constructRTreeFromFile(line);
         }
     }
 }

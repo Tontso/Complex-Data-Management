@@ -13,7 +13,7 @@ public class Exercise3 {
         fileRtree = new Scanner(new File("Rtree.txt"));
         fileNNqueries = new Scanner(new File("NNqueries.txt"));
         RTree tree = new RTree();
-        int k = 10;
+        int k = 3;
         Double[] query;
         int queryCount = 0;
 
@@ -31,7 +31,7 @@ public class Exercise3 {
         
         while(fileRtree.hasNextLine()){
             String[] line = fileRtree.nextLine().replace("[", "").replace("]", "").replace(" ", "").split(",");
-            tree.cunstructRTreeFromFile(line);
+            tree.constructRTreeFromFile(line);
         }
     }
 }

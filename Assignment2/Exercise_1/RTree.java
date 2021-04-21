@@ -4,7 +4,6 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -121,7 +120,7 @@ public class RTree {
         for (Integer key : tree.keySet()) {
             System.out.println(tree.get(key).size() +" nodes at level "+key);
             //############################# TEST ###########################################
-            /* for (Node node : tree.get(key)) {
+           /*  for (Node node : tree.get(key)) {
                 System.out.print(node.getData().size()+", ");
             }
             System.out.println("\n"); */
@@ -151,7 +150,7 @@ public class RTree {
 
 // #################################################### PART-2 ####################################################
 
-    public void cunstructRTreeFromFile(String[] line){
+    public void constructRTreeFromFile(String[] line){
         currentNode = new Node(line);
         listTree.put(currentNode.getId(),currentNode);
     }
@@ -196,7 +195,7 @@ public class RTree {
                return true;
 
         // xquery > xtree (inside) 
-        if((queryCorr[0] > treeCorr[0]) && (queryCorr[0] <= treeCorr[1])) // DEN THELEI ELEGXOS X-HIGHT
+        if((queryCorr[0] > treeCorr[0]) && (queryCorr[0] <= treeCorr[1])) 
             return true;
         
         return false;
@@ -209,7 +208,7 @@ public class RTree {
                return true;
 
         // (yq-low > yt-low) and (yq-low <= yt-ght)
-        if((queryCorr[1] > treeCorr[2]) && (queryCorr[1] <= treeCorr[3])) // DEN THELEI ELEGXOS X-HIGHT
+        if((queryCorr[1] > treeCorr[2]) && (queryCorr[1] <= treeCorr[3])) 
             return true;
         
         return false;
@@ -222,7 +221,6 @@ public class RTree {
     public String bestFirstknn(Double[] query, RTree tree, Node root, int k) {
         PriorityQueue<Node> pq = new PriorityQueue<>(new CustomComparator());
         PriorityQueue<Double[]>kNeighbor = new PriorityQueue<>(new CustomComparatorNeightbor());
-        List<Double> dis = new ArrayList<>();
         Node currentNode;
         Node child; 
         double minDistance = Double.POSITIVE_INFINITY;
@@ -234,20 +232,19 @@ public class RTree {
             pq.add(tree.getListTree().get(key));          
         }
         
-        while(!pq.isEmpty() && pq.peek().getDistance() < minDistance){
+        while((!pq.isEmpty()) && kNeighbor.size() <= k){
             currentNode = pq.poll();
             if(currentNode.getIsnonleaf() == 1){
                 for(Integer key : currentNode.getData().keySet()){
                     tree.getListTree().get(key).setDistance(currentNode.getData().get(key), query); //Calculate distance
-                    if(tree.getListTree().get(key).getDistance() < minDistance)
-                        pq.add(tree.getListTree().get(key));          
+                    //if(tree.getListTree().get(key).getDistance() < minDistance)
+                    pq.add(tree.getListTree().get(key));          
                 }
             }else{
                 for(Integer key : currentNode.getData().keySet()){
                     currentNode.setDistance(currentNode.getData().get(key), query);
-                    if(currentNode.getDistance() < minDistance)
-                            minDistance = currentNode.getDistance();
-                    dis.add(currentNode.getDistance());         // TEST
+                    //if(currentNode.getDistance() < minDistance)
+                    //        minDistance = currentNode.getDistance();
                     minDistance = currentNode.getDistance();
                     kNeighbor.add(new Double[]{minDistance,(double)key});
                     if(kNeighbor.size() == (k+1))
@@ -255,8 +252,8 @@ public class RTree {
                 }
             }
         }
-        Collections.sort(dis,(a,b) -> a.compareTo(b));
 
+        //System.out.println(kNeighbor.size());
         String str ="";
         while(!kNeighbor.isEmpty())
             str = ","+kNeighbor.poll()[1].intValue()+ str;
