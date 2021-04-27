@@ -10,10 +10,10 @@ public class Exercise3 {
 
     
     public static void main(String[] args) throws FileNotFoundException{
-        fileRtree = new Scanner(new File("Rtree.txt"));
-        fileNNqueries = new Scanner(new File("NNqueries.txt"));
+        fileRtree = new Scanner(new File(args[0]));  // Rtree.txt
+        fileNNqueries = new Scanner(new File(args[1])); // NNqueries.txt
         RTree tree = new RTree();
-        int k = 21;
+        int k = Integer.parseInt(args[2]);
         Double[] query;
         int queryCount = 0;
 

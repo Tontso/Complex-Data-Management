@@ -20,8 +20,9 @@ public class Exercise1{
     private static int M = 20;
 
     public static void main(String[] args) throws IOException {
-        fileScannerOffset = new Scanner(new File("offsets.txt"));
-        fileScannerCoord = new Scanner(new File("coords.txt"));
+    	
+        fileScannerOffset = new Scanner(new File(args[0]));  // offsets.txt
+        fileScannerCoord = new Scanner(new File(args[1]));   // coords.txt
         FileWriter writer = new FileWriter(new File("Rtree.txt")); 
         
         // Load data from file

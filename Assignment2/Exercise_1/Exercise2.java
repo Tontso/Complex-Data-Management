@@ -14,8 +14,8 @@ public class Exercise2 {
     private static Scanner fileRtree;
 
     public static void main(String[] args) throws FileNotFoundException {
-        fileRqueries = new Scanner(new File("Rqueries.txt"));
-        fileRtree = new Scanner(new File("Rtree.txt"));
+        fileRqueries = new Scanner(new File(args[1]));  // Rqueries.txt
+        fileRtree = new Scanner(new File(args[0]));        // Rtree.txt
         Double[] query ;
         RTree tree = new RTree();
         int queryCount = 0;
